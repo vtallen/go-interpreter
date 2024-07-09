@@ -39,3 +39,16 @@ All possible token types will be represented by constants
 **Special tokens:**
 * ILLEGAL - represents a token not defined by the parser
 * EOF - represents the end of a file and tells the parser that it can stop
+
+### 1.3 The lexer
+**Goal:** A piece of code that goes through the source code as input and outputs a list of tokens from that source code.
+
+* It goes through the input and outputs each next token it recognizes 
+
+**Steps:** 
+* Initalize the lexer with the source code
+* Call NextToken() repeatedly to go through the code character by character until all of the code is consumed.
+
+**Why is this method not ideal for production?**
+* It does not allow the lexer to keep track of line and column numbers in the file, so errors could be hard to track down.
+* The "correct" way to do this would be to initalize the lexer with an io.Reader instead of a string with the code in it.

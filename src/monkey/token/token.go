@@ -33,7 +33,7 @@ const (
 	LPAREN = "("
 	RPAREN = ")"
 	LBRACE = "{"
-	RBARCE = "}"
+	RBRACE = "}"
 
 	// Keywords: reserved words that have meaning that are not variables
 	FUNCTION = "FUNCTION" // functions defined as fn()
