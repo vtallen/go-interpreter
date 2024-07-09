@@ -28,4 +28,14 @@ This interpreter will function by taking the source code, converting it into a l
 * Non-variable words (keywords) will get treated differently depending on what they are as behavior should be different between a *let* or an *fn*
 * Symbols will get handled differently depending on the symbol as well
 
+### token/token.go
+**Token Type as a string**
+* Allows us to differentiate between types of tokens
+* Easy to debug as a string can be printed
+* Downside is it is less performent than using an int or byte would be 
 
+All possible token types will be represented by constants
+
+**Special tokens:**
+* ILLEGAL - represents a token not defined by the parser
+* EOF - represents the end of a file and tells the parser that it can stop
