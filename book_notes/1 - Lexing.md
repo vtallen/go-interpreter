@@ -52,3 +52,6 @@ All possible token types will be represented by constants
 **Why is this method not ideal for production?**
 * It does not allow the lexer to keep track of line and column numbers in the file, so errors could be hard to track down.
 * The "correct" way to do this would be to initalize the lexer with an io.Reader instead of a string with the code in it.
+### 1.5 REPL
+**REPL:** Read eval print loop
+* Is what's responsible for the "interactive console" of languages like python and js

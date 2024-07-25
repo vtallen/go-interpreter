@@ -18,8 +18,21 @@
                 "source": false
               }
             }
+          },
+          {
+            "id": "23c38357684ee2ec",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "2 - Parsing.md",
+                "mode": "source",
+                "source": false
+              }
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -69,8 +82,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "b2b25abcfb103903",
@@ -86,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "1 - Lexing.md",
+                "file": "2 - Parsing.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "1 - Lexing.md",
+                "file": "2 - Parsing.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "1 - Lexing.md"
+                "file": "2 - Parsing.md"
               }
             }
           }
@@ -147,8 +159,10 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "18bd8b2b2e44eee3",
+  "active": "23c38357684ee2ec",
   "lastOpenFiles": [
+    "1 - Lexing.md",
+    "2 - Parsing.md",
     "0.1 - Introduction.md"
   ]
 }

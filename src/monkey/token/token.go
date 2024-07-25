@@ -23,8 +23,18 @@ const (
 	INT   = "INT"   // literals like: 1234
 
 	// Operators
-	ASSIGN = "="
-	PLUS   = "+"
+	ASSIGN   = "="
+	PLUS     = "+"
+	MINUS    = "-"
+	BANG     = "!"
+	ASTERISK = "*"
+	SLASH    = "/"
+
+	LT = "<"
+	GT = ">"
+
+	EQ     = "=="
+	NOT_EQ = "!="
 
 	// Delimiter characters
 	COMMA     = ","
@@ -38,4 +48,38 @@ const (
 	// Keywords: reserved words that have meaning that are not variables
 	FUNCTION = "FUNCTION" // functions defined as fn()
 	LET      = "LET"      // Variable declaration like "let five = 5;"
+	TRUE     = "TRUE"
+	FALSE    = "FALSE"
+	IF       = "IF"
+	ELSE     = "ELSE"
+	RETURN   = "RETURN"
 )
+
+// Contains a map of reserved words for the language and their corresponding TokenType
+var keywords = map[string]TokenType{
+	"fn":     FUNCTION,
+	"let":    LET,
+	"true":   TRUE,
+	"false":  FALSE,
+	"if":     IF,
+	"else":   ELSE,
+	"return": RETURN,
+}
+
+/*
+* Function: LookupIdent
+*
+* Paremters: ident string - The identifier to look up
+*
+* Returns: TokenType - The type of the identifier. Returns IDENT if ident is not a reserved word
+*
+* Description: Looks up the identifier in the keywords map and returns the corresponding TokenType. If ident is not a reserved word, we can
+*              conclude it is a variable name and IDENT will be returned
+ */
+func LookupIdent(ident string) TokenType {
+	if tok, ok := keywords[ident]; ok {
+		return tok
+	}
+
+	return IDENT
+}

@@ -57,6 +57,105 @@ func (l *Lexer) readChar() {
 }
 
 /*
+* Function: Lexer.readIdentifier
+*
+* Parameters: None
+*
+* Returns: string - The identifier that was read from the input string (it can contain a-z, A-Z and _)
+*
+* Description: Reads an identifier from the input string and returns it. An identifier is defined as
+*              a sequence of characters that can contain a-z, A-Z and _ without any whitespace
+*
+ */
+func (l *Lexer) readIdentifier() string {
+	position := l.position
+	for isLetter(l.ch) {
+		l.readChar()
+	}
+
+	return l.input[position:l.position]
+}
+
+/*
+* Function: Lexer.readNumber
+*
+* Parameters: None
+*
+* Returns: string - The number that was read from the input string (contains characters from 0-9)
+*
+* Description: Reads a number of an arbitrary length from the input string and returns it.
+*
+ */
+
+func (l *Lexer) readNumber() string {
+	position := l.position
+	for isDigit(l.ch) {
+		l.readChar()
+	}
+
+	return l.input[position:l.position]
+}
+
+/*
+* Function: Lexer.skipWhitespace
+*
+* Parameters: None
+*
+* Returns: None
+*
+* Description: Advances the lexer past any whitespace characters in the input string including \t, \n, \r escape codes
+ */
+func (l *Lexer) skipWhitespace() {
+	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
+		l.readChar()
+	}
+}
+
+/*
+* Function: Lexer.peekChar
+*
+* Parameters: None
+*
+* Retrurns: byte - the next char in the input if it exists, 0 otherwise
+*
+* Description: Looks at the next char in the input and returns it
+*
+ */
+func (l *Lexer) peekChar() byte {
+	if l.readPosition >= len(l.input) {
+		return 0
+	} else {
+		return l.input[l.readPosition]
+	}
+}
+
+/*
+* Function isLetter
+*
+* Parameters: ch byte - The character to check if it is a letter
+*
+* Returns: bool - True if the character is in a-z, A-Z, or is _, false otherwise
+*
+* Description: Checks if the given character is a letter (a-z, A-Z) or an underscore
+ */
+func isLetter(ch byte) bool {
+	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
+}
+
+/*
+* Function: isDigit
+*
+* Parameters: ch byte - The character to check if it is a digit
+*
+* Returns: bool - True if the character is in 0-9, false otherwise
+*
+* Description: Checks if the given character is a number (0-9)
+ */
+func isDigit(ch byte) bool {
+	return '0' <= ch && ch <= '9'
+}
+
+/*
 * Function: Lexer.NextToken
 *
 * Parameters: None
@@ -69,19 +168,45 @@ func (l *Lexer) readChar() {
 func (l *Lexer) NextToken() token.Token {
 	var tok token.Token
 
+	l.skipWhitespace()
+
 	switch l.ch {
 	case '=':
-		tok = newToken(token.ASSIGN, l.ch)
+		if l.peekChar() == '=' {
+			ch := l.ch
+			l.readChar()
+			tok = token.Token{Type: token.EQ, Literal: string(ch) + string(l.ch)}
+		} else {
+			tok = newToken(token.ASSIGN, l.ch)
+		}
+	case '+':
+		tok = newToken(token.PLUS, l.ch)
+	case '-':
+		tok = newToken(token.MINUS, l.ch)
+	case '!':
+		if l.peekChar() == '=' {
+			ch := l.ch
+			l.readChar()
+			tok = token.Token{Type: token.NOT_EQ, Literal: string(ch) + string(l.ch)}
+		} else {
+			tok = newToken(token.BANG, l.ch)
+		}
+	case '/':
+		tok = newToken(token.SLASH, l.ch)
+	case '*':
+		tok = newToken(token.ASTERISK, l.ch)
+	case '<':
+		tok = newToken(token.LT, l.ch)
+	case '>':
+		tok = newToken(token.GT, l.ch)
 	case ';':
 		tok = newToken(token.SEMICOLON, l.ch)
+	case ',':
+		tok = newToken(token.COMMA, l.ch)
 	case '(':
 		tok = newToken(token.LPAREN, l.ch)
 	case ')':
 		tok = newToken(token.RPAREN, l.ch)
-	case ',':
-		tok = newToken(token.COMMA, l.ch)
-	case '+':
-		tok = newToken(token.PLUS, l.ch)
 	case '{':
 		tok = newToken(token.LBRACE, l.ch)
 	case '}':
@@ -89,6 +214,21 @@ func (l *Lexer) NextToken() token.Token {
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF
+	default:
+		if isLetter(l.ch) {
+			tok.Literal = l.readIdentifier()
+			tok.Type = token.LookupIdent(tok.Literal)
+			// An early return because readIdentifier advaces the readPostition and position fields of
+			// the lexer past the last character of the identifier/reserved word so we do not need to call readChar again
+			return tok
+		} else if isDigit(l.ch) {
+			tok.Type = token.INT
+			tok.Literal = l.readNumber()
+			// This early return is done for the same reason as the previous early return
+			return tok
+		} else {
+			tok = newToken(token.ILLIGAL, l.ch)
+		}
 	}
 
 	// Move the lexer to the next character
